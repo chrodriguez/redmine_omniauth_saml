@@ -1,0 +1,7 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "login", :plugin => "redmine_omniauth_cas" %>
+<% end %>
+
+<div id="cas-login">
+  <%= link_to 'Login with CAS', '/auth/cas' %>
+</div>
