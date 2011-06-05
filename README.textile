@@ -3,3 +3,5 @@ h1. Redmine OmniAuth plugin
 This plugins adds "OmniAuth":https://github.com/intridea/omniauth support to "Redmine":http://www.redmine.org/. OmniAuth is a Rack middleware that let you authenticate against many sources (see "the list of supported sources":https://github.com/intridea/omniauth/blob/master/README.md).
 
 Once you have this plugin installed, you'll have to define OmniAuth providers, currently in the @init.rb@ file.
+
+NB: the plugin doesn't support on-the-fly registration for now.
