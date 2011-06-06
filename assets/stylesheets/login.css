@@ -1,6 +1,6 @@
 #cas-login {
   width:414px; margin:4em auto 0; padding:1em;
-  font-size:120%; text-align:center;
-  border:2px solid #5a5; background:#cfc;
+  font-size:120%; font-weight:bold; text-align:center;
+  border:2px solid #78cc01; background:#cfc;
 }
 #login-form table { margin-top:1em; }
