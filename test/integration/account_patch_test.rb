@@ -10,6 +10,7 @@ class AccountPatchTest < ActionController::IntegrationTest
 
     context "OmniAuth CAS strategy" do
       setup do
+        Setting.default_language = 'en'
         OmniAuth.config.test_mode = true
       end
 
@@ -31,7 +32,9 @@ class AccountPatchTest < ActionController::IntegrationTest
         OmniAuth.config.mock_auth[:cas] = { 'uid' => 'johndoe' }
         get '/auth/cas/callback'
         assert_redirected_to '/login'
+        follow_redirect!
         assert_equal User.anonymous, User.current
+        assert_select 'div.flash.error', 'Invalid user or password'
       end
     end
   end

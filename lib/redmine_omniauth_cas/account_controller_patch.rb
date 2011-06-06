@@ -11,6 +11,7 @@ module Redmine::OmniAuthCAS
       # maybe it should be splitted in core
       if user.blank?
         invalid_credentials
+        flash[:error] = l(:notice_account_invalid_creditentials)
         redirect_to signin_url
       else
         successful_authentication(user)
