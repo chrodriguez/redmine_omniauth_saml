@@ -21,8 +21,8 @@ require 'omniauth/oauth'
 
 # Patches to existing classes/modules
 config.to_prepare do
-  require_dependency 'redmine_omniauth_cas/account_controller_patch'
   require_dependency 'redmine_omniauth_cas/account_helper_patch'
+  require_dependency 'redmine_omniauth_cas/account_controller_patch'
 end
 
 # Full host in case the apps runs behind a reverse-proxy
