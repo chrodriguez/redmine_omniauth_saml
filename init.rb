@@ -8,6 +8,8 @@ Redmine::Plugin.register :redmine_omniauth_cas do
   author_url 'mailto:jeanbaptiste.barth@gmail.com'
   url 'http://github.com/jbbarth/redmine_omniauth_cas'
   version '0.0.1'
+  settings :default => { 'label_login_with_cas' => '' },
+           :partial => 'settings/omniauth_cas_settings'
 end
 
 # Hooks

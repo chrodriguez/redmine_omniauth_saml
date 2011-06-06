@@ -3,5 +3,6 @@
 <% end %>
 
 <div id="cas-login">
-  <%= link_to l(:label_login_with_cas), '/auth/cas' %>
+  <% label = Setting["plugin_redmine_omniauth_cas"]["label_login_with_cas"].presence || l(:label_login_with_cas) %>
+  <%= link_to label, '/auth/cas' %>
 </div>
