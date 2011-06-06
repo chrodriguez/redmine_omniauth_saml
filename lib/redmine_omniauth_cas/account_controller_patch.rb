@@ -15,4 +15,8 @@ class AccountController
       successful_authentication(user)
     end
   end
+
+  def blank
+    render :text => "Not Found", :status => 404
+  end
 end
