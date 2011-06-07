@@ -1,6 +1,9 @@
-#cas-login {
-  width:414px; margin:4em auto 0; padding:1em;
-  font-size:120%; font-weight:bold; text-align:center;
-  border:2px solid #78cc01; background:#cfc;
+#cas-login { margin:3em auto 0; font-size:120%; font-weight:bold; text-align:center; }
+#cas-login a, #cas-login a:hover {
+  display:inline-block; padding:0.4em 1em; max-width:800px; text-align:center;
+  color:#fff; background-color:#78cc01; text-decoration:none !important; text-shadow:1px 1px 1px #666;
+  -moz-border-radius:14px; -webkit-border-radius:14px; border-radius:14px;
 }
-#login-form table { margin-top:1em; }
+#cas-login a:hover { background-color:#70c600; }
+#cas-login a:active { position:relative; top:1px; }
+#login-form table { margin-top:2em; }
