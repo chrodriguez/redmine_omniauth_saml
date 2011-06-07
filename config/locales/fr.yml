@@ -2,3 +2,5 @@ fr:
   label_login_with_cas: S'authentifier avec CAS
   label_login_page_text: Texte de la page de login
   label_cas_server: Adresse serveur CAS
+  text_full_logout_proposal: "Peut-être voulez-vous vous %{value} avant d'essayer un autre nom d'utilisateur ?"
+  text_logout_from_cas: "déconnecter de CAS"

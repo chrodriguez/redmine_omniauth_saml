@@ -11,7 +11,12 @@ module Redmine::OmniAuthCAS
       # maybe it should be splitted in core
       if user.blank?
         invalid_credentials
-        flash[:error] = l(:notice_account_invalid_creditentials)
+        error = l(:notice_account_invalid_creditentials)
+        if cas_url.present?
+          link = self.class.helpers.link_to(l(:text_logout_from_cas), cas_url+"/logout", :target => "_blank")
+          error << ". #{l(:text_full_logout_proposal, :value => link)}"
+        end
+        flash[:error] = error
         redirect_to signin_url
       else
         successful_authentication(user)
@@ -20,6 +25,11 @@ module Redmine::OmniAuthCAS
 
     def blank
       render :text => "Not Found", :status => 404
+    end
+
+    private
+    def cas_url
+      Setting["plugin_redmine_omniauth_cas"]["cas_server"]
     end
   end
 end
