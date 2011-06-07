@@ -8,7 +8,7 @@ Redmine::Plugin.register :redmine_omniauth_cas do
   author_url 'mailto:jeanbaptiste.barth@gmail.com'
   url 'http://github.com/jbbarth/redmine_omniauth_cas'
   version '0.0.1'
-  settings :default => { 'label_login_with_cas' => '' },
+  settings :default => { 'label_login_with_cas' => '', 'cas_server' => 'http://localhost:9292/' },
            :partial => 'settings/omniauth_cas_settings'
 end
 
@@ -44,4 +44,10 @@ end
 
 # Sample CAS provider
 require 'omniauth/enterprise'
-config.middleware.use OmniAuth::Strategies::CAS, :cas_server => 'http://localhost:9292'
+setup_app = Proc.new do |env|
+  cas_server = Setting["plugin_redmine_omniauth_cas"]["cas_server"]
+  cas_server = 'http://localhost:9292/' if cas_server.blank?
+  config = OmniAuth::Strategies::CAS::Configuration.new(:cas_server => cas_server)
+  env['omniauth.strategy'].instance_variable_set(:@configuration, config)
+end
+config.middleware.use OmniAuth::Strategies::CAS, :cas_server => 'http://localhost:9292/', :setup => setup_app

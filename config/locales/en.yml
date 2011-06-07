@@ -1,3 +1,4 @@
 en:
   label_login_with_cas: Login with CAS
   label_login_page_text: Login page text
+  label_cas_server: CAS Server URL

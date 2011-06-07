@@ -1,3 +1,4 @@
 fr:
   label_login_with_cas: S'authentifier avec CAS
   label_login_page_text: Texte de la page de login
+  label_cas_server: Adresse serveur CAS

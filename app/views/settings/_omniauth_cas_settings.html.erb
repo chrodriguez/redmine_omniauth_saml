@@ -4,6 +4,10 @@
   <label><%= l(:label_login_page_text) %> :</label>
   <%= text_field_tag 'settings[label_login_with_cas]', @settings['label_login_with_cas'] %>
 </p>
+<p>
+  <label><%= l(:label_cas_server) %> :</label>
+  <%= text_field_tag 'settings[cas_server]', @settings['cas_server'] %>
+</p>
 </fieldset>
 
 
