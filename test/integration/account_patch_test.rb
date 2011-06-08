@@ -36,8 +36,6 @@ class AccountPatchTest < ActionController::IntegrationTest
         assert_equal User.anonymous, User.current
         assert_select 'div.flash.error', /Invalid user or password/
       end
-
-      should "use the configured CAS address if provided in plugin settings"
     end
   end
 end

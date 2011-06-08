@@ -1,12 +1,13 @@
+<% flash.now[:error] = "CAS URL #{l("activerecord.errors.messages.blank")}" if @settings['cas_server'].blank? %>
 <fieldset>
 <legend>OmniAuth CAS Plugin</legend>
 <p>
-  <label><%= l(:label_login_page_text) %> :</label>
-  <%= text_field_tag 'settings[label_login_with_cas]', @settings['label_login_with_cas'] %>
+  <label class="required"><%= l(:label_cas_server) %> :</label>
+  <%= text_field_tag 'settings[cas_server]', @settings['cas_server'] %>
 </p>
 <p>
-  <label><%= l(:label_cas_server) %> :</label>
-  <%= text_field_tag 'settings[cas_server]', @settings['cas_server'] %>
+  <label><%= l(:label_login_page_text) %> :</label>
+  <%= text_field_tag 'settings[label_login_with_cas]', @settings['label_login_with_cas'] %>
 </p>
 </fieldset>
 
