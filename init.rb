@@ -1,4 +1,14 @@
 require 'redmine'
+require 'redmine_omniauth_cas'
+require 'redmine_omniauth_cas/hooks'
+require 'omniauth/core'
+require 'omniauth/oauth'
+
+# Patches to existing classes/modules
+config.to_prepare do
+  require_dependency 'redmine_omniauth_cas/account_helper_patch'
+  require_dependency 'redmine_omniauth_cas/account_controller_patch'
+end
 
 # Plugin generic informations
 Redmine::Plugin.register :redmine_omniauth_cas do
@@ -11,19 +21,6 @@ Redmine::Plugin.register :redmine_omniauth_cas do
   requires_redmine :version_or_higher => '1.2.0'
   settings :default => { 'label_login_with_cas' => '', 'cas_server' => '' },
            :partial => 'settings/omniauth_cas_settings'
-end
-
-# Hooks
-require 'redmine_omniauth_cas/hooks'
-
-# OmniAuth basics
-require 'omniauth/core'
-require 'omniauth/oauth'
-
-# Patches to existing classes/modules
-config.to_prepare do
-  require_dependency 'redmine_omniauth_cas/account_helper_patch'
-  require_dependency 'redmine_omniauth_cas/account_controller_patch'
 end
 
 # Full host in case the apps runs behind a reverse-proxy
@@ -46,9 +43,8 @@ end
 # Sample CAS provider
 require 'omniauth/enterprise'
 setup_app = Proc.new do |env|
-  cas_server = Setting["plugin_redmine_omniauth_cas"]["cas_server"]
-  if cas_server.present?
-    config = OmniAuth::Strategies::CAS::Configuration.new(:cas_server => cas_server)
+  if Redmine::OmniAuthCAS.cas_server.present?
+    config = OmniAuth::Strategies::CAS::Configuration.new(:cas_server => Redmine::OmniAuthCAS.cas_server)
     env['omniauth.strategy'].instance_variable_set(:@configuration, config)
   end
 end

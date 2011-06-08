@@ -1,4 +1,4 @@
-<% if Setting["plugin_redmine_omniauth_cas"]["cas_server"].present? %>
+<% if Redmine::OmniAuthCAS.cas_server.present? %>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag "login", :plugin => "redmine_omniauth_cas" %>

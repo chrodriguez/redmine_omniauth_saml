@@ -29,7 +29,7 @@ module Redmine::OmniAuthCAS
 
     private
     def cas_url
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"]
+      Redmine::OmniAuthCAS.cas_server
     end
   end
 end
