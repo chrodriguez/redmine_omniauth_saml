@@ -15,6 +15,27 @@ Then :
 * configure your CAS server URL at the end of @init.rb@ file (should not be hardcoded no more in future versions)
 * restart your Redmine instance (depends on how you host it)
 
+h2. Coming soon features
+
+Here are some ideas that could be implemented in future releases. I'm really open to suggestions on this plugin, so don't hesitate to fill an issue directly on GitHub :
+* add a plugin option to hide 'normal' login/password form
+* authorize on-the-fly registration
+* authorize non-conventional CAS URLs (for now you can just specify the base CAS url, and login, logout, validate, etc. URLs are deduced)
+
+h2. Internals
+
+h3. Why not use the AuthSource Redmine system ?
+
+From a functionality point of view, Redmine's AuthSource system is useful for 2 things :
+* you want to be able to define multiple occurrences of the same authentication source => not possible afaik with OmniAuth CAS strategy
+* you want to restrict users to a certain auth source => not so interesting if the login is filled in an external form
+
+Actually, OpenID authentication in core is not an AuthSource neither.
+
+h3. Why is there a default on http://localhost:9292/ everywhere ?
+
+There are some limitations with the current implementation of OmniAuth CAS strategy. To be clear, it doesn't support dynamic parameters very well, and forces to have a default :cas_server or :cas_login_url defined in the initialization process. I hope I'll have the time to propose a fix or develop my own CAS strategy soon.
+
 h2. Contribute
 
 If you like this plugin, it's a good idea to contribute :
