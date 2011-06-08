@@ -47,8 +47,8 @@ end
 require 'omniauth/enterprise'
 setup_app = Proc.new do |env|
   cas_server = Setting["plugin_redmine_omniauth_cas"]["cas_server"]
-  cas_server = 'http://localhost:9292/' if cas_server.blank?
+  cas_server = 'http://localhost:9292' if cas_server.blank?
   config = OmniAuth::Strategies::CAS::Configuration.new(:cas_server => cas_server)
   env['omniauth.strategy'].instance_variable_set(:@configuration, config)
 end
-config.middleware.use OmniAuth::Strategies::CAS, :cas_server => 'http://localhost:9292/', :setup => setup_app
+config.middleware.use OmniAuth::Strategies::CAS, :cas_server => 'http://localhost:9292', :setup => setup_app
