@@ -18,6 +18,7 @@ Then :
 h2. Coming soon features
 
 Here are some ideas that could be implemented in future releases. I'm really open to suggestions on this plugin, so don't hesitate to fill an issue directly on GitHub :
+* implement ticket validation when first opening your browser (for now you’ll be considered as logged out if your session has expired on Redmine but your ticket is still valid on the CAS server)
 * add a plugin option to hide 'normal' login/password form
 * authorize on-the-fly registration
 * authorize non-conventional CAS URLs (for now you can just specify the base CAS url, and login, logout, validate, etc. URLs are deduced)
