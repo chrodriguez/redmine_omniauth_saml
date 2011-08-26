@@ -4,10 +4,14 @@
 <p>
   <label><%= l(:label_cas_server) %><span class="required"> *</span> :</label>
   <%= text_field_tag 'settings[cas_server]', @settings['cas_server'] %>
+  <br />
+  <em><%= l(:label_example) %>: http://cas.example.com</em>
 </p>
 <p>
   <label><%= l(:label_cas_service_validate_url) %> :</label>
   <%= text_field_tag 'settings[cas_service_validate_url]', @settings['cas_service_validate_url'] %>
+  <br />
+  <em><%= l(:label_example) %>: http://cas.example.net/serviceValidate</em>
 </p>
 <p>
   <label><%= l(:label_login_page_text) %> :</label>
