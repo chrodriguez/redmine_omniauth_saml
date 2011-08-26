@@ -8,6 +8,10 @@ module Redmine::OmniAuthCAS
       settings_hash["cas_server"]
     end
 
+    def cas_service_validate_url
+      settings_hash["cas_service_validate_url"].presence || nil
+    end
+
     def label_login_with_cas
       settings_hash["label_login_with_cas"]
     end
