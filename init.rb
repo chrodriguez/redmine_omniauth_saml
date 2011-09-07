@@ -44,7 +44,9 @@ end
 require 'omniauth/enterprise'
 setup_app = Proc.new do |env|
   if Redmine::OmniAuthCAS.cas_server.present?
-    config = OmniAuth::Strategies::CAS::Configuration.new(:cas_server => Redmine::OmniAuthCAS.cas_server)
+    hsh = { :cas_server => Redmine::OmniAuthCAS.cas_server }
+    hsh[:cas_service_validate_url] = Redmine::OmniAuthCAS.cas_service_validate_url if Redmine::OmniAuthCAS.cas_service_validate_url.present?
+    config = OmniAuth::Strategies::CAS::Configuration.new(hsh)
     env['omniauth.strategy'].instance_variable_set(:@configuration, config)
   end
 end
