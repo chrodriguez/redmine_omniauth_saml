@@ -1,4 +1,4 @@
-ActionController::Routing::Routes.draw do |map|
-  map.connect 'auth/:provider/callback', :controller => 'account', :action => 'login_with_omniauth'
-  map.connect 'auth/:provider', :controller => 'account', :action => 'blank'
+RedmineApp::Application.routes.draw do
+  match 'auth/:provider/callback', :to => 'account#login_with_omniauth'
+  match 'auth/:provider', :to => 'account#blank'
 end

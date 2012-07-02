@@ -1,14 +1,11 @@
 require 'redmine'
 require 'redmine_omniauth_cas'
 require 'redmine_omniauth_cas/hooks'
-require 'omniauth/core'
-require 'omniauth/oauth'
-
-# Rails 3 compat
-reloader = Redmine::VERSION::MAJOR <= 1 ? config : ActionDispatch::Callbacks
+require 'omniauth/patches'
+require 'omniauth/dynamic_full_host'
 
 # Patches to existing classes/modules
-reloader.to_prepare do
+ActionDispatch::Callbacks.to_prepare do
   require_dependency 'redmine_omniauth_cas/account_helper_patch'
   require_dependency 'redmine_omniauth_cas/account_controller_patch'
 end
@@ -21,36 +18,28 @@ Redmine::Plugin.register :redmine_omniauth_cas do
   author_url 'mailto:jeanbaptiste.barth@gmail.com'
   url 'http://github.com/jbbarth/redmine_omniauth_cas'
   version '0.1.1'
-  requires_redmine :version_or_higher => '1.2.0'
+  requires_redmine :version_or_higher => '2.0.0'
   settings :default => { 'label_login_with_cas' => '', 'cas_server' => '' },
            :partial => 'settings/omniauth_cas_settings'
 end
 
-# Full host in case the apps runs behind a reverse-proxy
-OmniAuth.config.full_host = Proc.new do |env|
-  url = env["omniauth.origin"] || env["rack.session"]["omniauth.origin"]
-  #parse url from env and remove both request_uri and query_string
-  if url.present?
-    uri = URI.parse(url)
-    url = "#{uri.scheme}://#{uri.host}"
-    url << ":#{uri.port}" unless uri.default_port == uri.port
-  #if no url found, fall back to config/app_config.yml addresses
-  else
-    url = Setting["host_name"]
-  end
-  url
-end
-
-# PROVIDERS
-
-# Sample CAS provider
-require 'omniauth/enterprise'
+# OmniAuth CAS
 setup_app = Proc.new do |env|
-  if Redmine::OmniAuthCAS.cas_server.present?
-    hsh = { :cas_server => Redmine::OmniAuthCAS.cas_server }
-    hsh[:cas_service_validate_url] = Redmine::OmniAuthCAS.cas_service_validate_url if Redmine::OmniAuthCAS.cas_service_validate_url.present?
-    config = OmniAuth::Strategies::CAS::Configuration.new(hsh)
-    env['omniauth.strategy'].instance_variable_set(:@configuration, config)
+  addr = Redmine::OmniAuthCAS.cas_server
+  cas_server = URI.parse(addr)
+  if cas_server
+    env['omniauth.strategy'].options.merge! :host => cas_server.host,
+                                            :port => cas_server.port,
+                                            :path => (cas_server.path != "/" ? cas_server.path : nil),
+                                            :ssl  => cas_server.scheme == "https"
   end
 end
-config.middleware.use OmniAuth::Strategies::CAS, :cas_server => 'http://localhost:9292', :setup => setup_app
+
+# tell Rails we use this middleware, with some default value just in case
+Rails.application.config.middleware.use OmniAuth::Builder do
+  #url = "http://nadine.application.ac.centre-serveur.i2/"
+  use OmniAuth::Strategies::CAS, :host => "localhost",
+                                 :port => "9292",
+                                 :ssl => false,
+                                 :setup => setup_app
+end
