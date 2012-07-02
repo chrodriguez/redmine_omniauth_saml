@@ -4,9 +4,12 @@ class AccountPatchTest < ActionController::IntegrationTest
   fixtures :users, :roles
 
   context "GET /auth/:provider/callback" do
-    should_route :get, "/auth/blah/callback", :controller => 'account',
-                                              :action => 'login_with_omniauth',
-                                              :provider => 'blah'
+    should "route things correctly" do
+      assert_routing(
+        { :method => :get, :path => "/auth/blah/callback" },
+        { :controller => 'account', :action => 'login_with_omniauth', :provider => 'blah' }
+      )
+    end
 
     context "OmniAuth CAS strategy" do
       setup do

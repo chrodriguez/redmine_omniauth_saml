@@ -2,7 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 #let's use the existing functional test so we don't have to re-setup everything
 #+ we are sure that existing tests pass each time we run this file only
-require 'test/functional/account_controller_test'
+require Rails.root.join('test/functional/account_controller_test')
 
 class AccountControllerTest
   context "GET /login CAS button" do
