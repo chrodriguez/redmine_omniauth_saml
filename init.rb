@@ -4,8 +4,11 @@ require 'redmine_omniauth_cas/hooks'
 require 'omniauth/core'
 require 'omniauth/oauth'
 
+# Rails 3 compat
+reloader = Redmine::VERSION::MAJOR <= 1 ? config : ActionDispatch::Callbacks
+
 # Patches to existing classes/modules
-config.to_prepare do
+reloader.to_prepare do
   require_dependency 'redmine_omniauth_cas/account_helper_patch'
   require_dependency 'redmine_omniauth_cas/account_controller_patch'
 end
