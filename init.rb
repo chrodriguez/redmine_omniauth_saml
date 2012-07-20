@@ -33,6 +33,10 @@ setup_app = Proc.new do |env|
                                             :path => (cas_server.path != "/" ? cas_server.path : nil),
                                             :ssl  => cas_server.scheme == "https"
   end
+  validate = Redmine::OmniAuthCAS.cas_service_validate_url
+  if validate
+    env['omniauth.strategy'].options.merge! :service_validate_url => validate
+  end
 end
 
 # tell Rails we use this middleware, with some default value just in case
