@@ -4,6 +4,13 @@ require 'redmine_omniauth_cas/hooks'
 require 'omniauth/patches'
 require 'omniauth/dynamic_full_host'
 
+# Diryt, not happy with it, but as long as I can't reproduce the bug
+# users are blocked because of failing OpenSSL checks, while the cert
+# is actually good, so...
+# TODO: try to understand why cert verification fails
+# Maybe https://github.com/intridea/omniauth/issues/404 can help
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
 # Patches to existing classes/modules
 ActionDispatch::Callbacks.to_prepare do
   require_dependency 'redmine_omniauth_cas/account_helper_patch'
