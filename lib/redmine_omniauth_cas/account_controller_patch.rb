@@ -19,6 +19,7 @@ module Redmine::OmniAuthCAS
         flash[:error] = error
         redirect_to signin_url
       else
+        user.update_attribute(:last_login_on, Time.now)
         successful_authentication(user)
       end
     end

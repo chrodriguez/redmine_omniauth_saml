@@ -31,6 +31,15 @@ class AccountPatchTest < ActionController::IntegrationTest
         assert_equal "admin", User.current.login
       end
 
+      should "update last_login_on field" do
+        user = User.find(1)
+        user.update_attribute(:last_login_on, Time.now - 6.hours)
+        OmniAuth.config.mock_auth[:cas] = { 'uid' => 'admin' }
+        get '/auth/cas/callback'
+        assert_redirected_to '/my/page'
+        assert Time.now - User.current.last_login_on < 30.seconds
+      end
+
       should "refuse login if user doesn't exist" do
         OmniAuth.config.mock_auth[:cas] = { 'uid' => 'johndoe' }
         get '/auth/cas/callback'
