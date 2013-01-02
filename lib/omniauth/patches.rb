@@ -16,7 +16,9 @@ module OmniAuth
         service_url = Addressable::URI.parse( service_url )
         service_url.query_values = service_url.query_values.tap { |qs| qs.delete('ticket') }
 
-        if service_url.host.nil?
+        validate_url = Addressable::URI.parse( @options.service_validate_url )
+
+        if service_url.host.nil? || validate_url.host.nil?
           cas_host + append_params(@options.service_validate_url, { :service => service_url.to_s, :ticket => ticket })
         else
           append_params(@options.service_validate_url, { :service => service_url.to_s, :ticket => ticket })
