@@ -1,7 +1,6 @@
 require_dependency 'account_controller'
 
-module Redmine::OmniAuthCAS
-  module AccountControllerPatch
+class AccountController
     def login_with_omniauth
       auth = request.env["omniauth.auth"]
       #user = User.find_by_provider_and_uid(auth["provider"], auth["uid"])
@@ -32,6 +31,4 @@ module Redmine::OmniAuthCAS
     def cas_url
       Redmine::OmniAuthCAS.cas_server
     end
-  end
 end
-AccountController.send(:include, Redmine::OmniAuthCAS::AccountControllerPatch)
