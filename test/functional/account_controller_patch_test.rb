@@ -5,6 +5,8 @@ require File.expand_path('../../test_helper', __FILE__)
 require Rails.root.join('test/functional/account_controller_test')
 
 class AccountControllerTest
+  fixtures :users, :roles
+
   context "GET /login CAS button" do
     should "show up only if there's a plugin setting for CAS URL" do
       Setting["plugin_redmine_omniauth_cas"]["cas_server"] = ""
@@ -13,6 +15,20 @@ class AccountControllerTest
       Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "blah"
       get :login
       assert_select '#cas-login'
+    end
+  end
+
+  context "GET login_with_omniauth" do
+    should "redirect to /my/page after successful login" do
+      request.env["omniauth.auth"] = {"uid"=>"admin"}
+      get :login_with_omniauth, :provider => "cas"
+      assert_redirected_to '/my/page'
+    end
+
+    should "redirect to /login after failed login" do
+      request.env["omniauth.auth"] = {"uid"=>"non-existent"}
+      get :login_with_omniauth, :provider => "cas"
+      assert_redirected_to '/login'
     end
   end
 end
