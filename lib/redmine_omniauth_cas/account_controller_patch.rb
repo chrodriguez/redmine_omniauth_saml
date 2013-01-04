@@ -20,6 +20,21 @@ class AccountController
     else
       user.update_attribute(:last_login_on, Time.now)
       successful_authentication(user)
+      #cannot be set earlier, because sucessful_authentication() triggers reset_session()
+      session[:logged_in_with_cas] = true
+    end
+  end
+
+  # Override AccountController#logout so we handle CAS logout too
+  def logout
+    logout_user
+    if session[:logged_in_with_cas]
+      cas_logout_url = URI.parse(Redmine::OmniAuthCAS.cas_server)
+                          .merge("/logout?gateway=1&service=#{home_url}")
+                          .to_s
+      redirect_to cas_logout_url
+    else
+      redirect_to home_url
     end
   end
 

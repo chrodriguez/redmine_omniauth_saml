@@ -56,6 +56,7 @@ h3. master/current
 * Fix: disable SSL certificate verification since it's totally broken
 * Fix: repare different url for validation
 * Feature: upgrade to OmniAuth 1.x and Redmine 2.x
+* Feature: clean log out from CAS for users logged in through CAS
 
 h3. v0.1.2
 

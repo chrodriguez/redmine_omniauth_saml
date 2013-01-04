@@ -30,5 +30,24 @@ class AccountControllerTest
       get :login_with_omniauth, :provider => "cas"
       assert_redirected_to '/login'
     end
+
+    should "set a boolean in session to keep track of login" do
+      request.env["omniauth.auth"] = {"uid"=>"admin"}
+      get :login_with_omniauth, :provider => "cas"
+      assert_redirected_to '/my/page'
+      assert session[:logged_in_with_cas]
+    end
+
+    should "redirect to Home if not logged in with CAS" do
+      get :logout
+      assert_redirected_to home_url
+    end
+
+    should "redirect to CAS logout if previously logged in with CAS" do
+      session[:logged_in_with_cas] = true
+      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/"
+      get :logout
+      assert_redirected_to 'http://cas.server/logout?gateway=1&service=http://test.host/'
+    end
   end
 end
