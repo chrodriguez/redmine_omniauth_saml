@@ -49,5 +49,12 @@ class AccountControllerTest
       get :logout
       assert_redirected_to 'http://cas.server/logout?gateway=1&service=http://test.host/'
     end
+
+    should "respect path in CAS server when generating logout url" do
+      session[:logged_in_with_cas] = true
+      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/cas"
+      get :logout
+      assert_redirected_to 'http://cas.server/cas/logout?gateway=1&service=http://test.host/'
+    end
   end
 end

@@ -30,8 +30,8 @@ class AccountController
     if session[:logged_in_with_cas]
       #logout_user() erases session, so we cannot factor this before
       logout_user
-      cas_logout_url = URI.parse(Redmine::OmniAuthCAS.cas_server)
-                          .merge("/logout?gateway=1&service=#{home_url}")
+      cas_logout_url = URI.parse(Redmine::OmniAuthCAS.cas_server+"/")
+                          .merge("./logout?gateway=1&service=#{home_url}")
                           .to_s
       redirect_to cas_logout_url
     else
