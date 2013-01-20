@@ -14,7 +14,7 @@ module Redmine::OmniAuthCAS
     module InstanceMethods
 
       def login_with_cas
-        if cas_settings[:replace_redmine_login]
+        if cas_settings[:enabled] && cas_settings[:replace_redmine_login]
           redirect_to :controller => "account", :action => "login_with_cas_redirect", :provider => "cas", :origin => back_url
         else
           login_without_cas
@@ -67,10 +67,8 @@ module Redmine::OmniAuthCAS
         end
       end
 
-      # Override AccountController#logout so we handle CAS logout too
       def logout_with_cas
-        if session[:logged_in_with_cas]
-          #logout_user() erases session, so we cannot factor this before
+        if cas_settings[:enabled] && session[:logged_in_with_cas]
           logout_user
           redirect_to cas_logout_url(home_url)
         else

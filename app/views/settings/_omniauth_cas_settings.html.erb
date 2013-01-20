@@ -1,6 +1,10 @@
 <% flash.now[:error] = "#{l("label_cas_server")} #{l("activerecord.errors.messages.blank")}" if @settings['cas_server'].blank? %>
 
 <p>
+  <label><%= l(:label_cas_enabled) %></label>
+  <%= check_box_tag 'settings[enabled]', true, @settings['enabled'] %>
+</p>
+<p>
   <label><%= l(:label_cas_server) %><span class="required"> *</span></label>
   <%= text_field_tag 'settings[cas_server]', @settings['cas_server'], :size => 50 %>
   <br />

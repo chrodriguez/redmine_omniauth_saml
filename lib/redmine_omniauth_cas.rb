@@ -4,6 +4,10 @@ module Redmine::OmniAuthCAS
       Setting["plugin_redmine_omniauth_cas"]
     end
 
+    def enabled?
+      settings_hash["enabled"]
+    end
+
     def cas_server
       settings_hash["cas_server"]
     end

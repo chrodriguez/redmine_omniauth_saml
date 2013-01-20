@@ -1,6 +1,7 @@
 fr:
   label_login_with_cas: S'authentifier avec CAS
   label_login_page_text: Texte de la page de login
+  label_cas_enabled: Activer l'authentification CAS
   label_cas_server: Adresse du serveur CAS
   label_cas_service_validate_url: Adresse de validation CAS (si différente)
   label_replace_redmine_login: Remplacer la page de login de Redmine
