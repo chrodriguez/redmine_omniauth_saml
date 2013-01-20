@@ -1,7 +1,8 @@
 en:
   label_login_with_cas: Login with CAS
   label_login_page_text: Login page text
-  label_cas_server: CAS Server URL
+  label_cas_server: CAS server URL
   label_cas_service_validate_url: CAS validation URL (if different)
-  text_full_logout_proposal: Maybe you'll want to %{value} before trying an other username ?
+  label_replace_redmine_login: Replace Redmine login page
+  text_full_logout_proposal: You may want to %{value} before trying an other username.
   text_logout_from_cas: logout from CAS

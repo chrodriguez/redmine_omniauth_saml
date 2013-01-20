@@ -6,11 +6,20 @@ module Redmine::OmniAuthCAS
       base.send(:include, InstanceMethods)
       base.class_eval do
         unloadable
+        alias_method_chain :login, :cas
         alias_method_chain :logout, :cas
       end
     end
 
     module InstanceMethods
+
+      def login_with_cas
+        if cas_settings[:replace_redmine_login]
+          redirect_to :controller => "account", :action => "login_with_cas_redirect", :provider => "cas", :origin => back_url
+        else
+          login_without_cas
+        end
+      end
 
       def login_with_cas_redirect
         render :text => "Not Found", :status => 404
@@ -24,16 +33,22 @@ module Redmine::OmniAuthCAS
         # taken from original AccountController
         # maybe it should be splitted in core
         if user.blank?
-          invalid_credentials
+          logger.warn "Failed login for '#{auth[:uid]}' from #{request.remote_ip} at #{Time.now.utc}"
           error = l(:notice_account_invalid_creditentials).sub(/\.$/, '')
           if cas_settings[:cas_server].present?
             link = self.class.helpers.link_to(l(:text_logout_from_cas), cas_logout_url, :target => "_blank")
             error << ". #{l(:text_full_logout_proposal, :value => link)}"
           end
-          flash[:error] = error
-          redirect_to signin_url
+          if cas_settings[:replace_redmine_login]
+            render_error({:message => error.html_safe, :status => 403})
+            return false
+          else
+            flash[:error] = error
+            redirect_to signin_url
+          end
         else
           user.update_attribute(:last_login_on, Time.now)
+          params[:back_url] = request.env["omniauth.origin"] unless request.env["omniauth.origin"].blank?
           successful_authentication(user)
           #cannot be set earlier, because sucessful_authentication() triggers reset_session()
           session[:logged_in_with_cas] = true

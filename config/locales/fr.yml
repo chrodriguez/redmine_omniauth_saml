@@ -3,5 +3,6 @@ fr:
   label_login_page_text: Texte de la page de login
   label_cas_server: Adresse du serveur CAS
   label_cas_service_validate_url: Adresse de validation CAS (si différente)
-  text_full_logout_proposal: "Peut-être voulez-vous vous %{value} avant d'essayer un autre nom d'utilisateur ?"
-  text_logout_from_cas: "déconnecter de CAS"
+  label_replace_redmine_login: Remplacer la page de login de Redmine
+  text_full_logout_proposal: Peut-être voulez-vous vous %{value} avant d'essayer un autre nom d'utilisateur ?
+  text_logout_from_cas: déconnecter de CAS

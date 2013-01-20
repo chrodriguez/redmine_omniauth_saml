@@ -25,6 +25,11 @@ module OmniAuth
         end
       end
       alias_method_chain :service_validate_url, :different_host
+
+      # patch to disable return_url to avoid polluting the service URL
+      def return_url
+        {}
+      end
     end
   end
 end

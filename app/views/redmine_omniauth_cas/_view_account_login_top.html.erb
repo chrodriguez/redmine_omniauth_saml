@@ -5,7 +5,7 @@
 <% end %>
 
 <div id="cas-login">
-  <%= link_to label_for_cas_login, :controller => "account", :action => "login_with_cas_redirect", :provider => "cas" %>
+  <%= link_to label_for_cas_login, :controller => "account", :action => "login_with_cas_redirect", :provider => "cas", :origin => back_url %>
 </div>
 
 <% end %>
