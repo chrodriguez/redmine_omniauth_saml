@@ -6,3 +6,6 @@ en:
   label_replace_redmine_login: Replace Redmine login page
   text_full_logout_proposal: You may want to %{value} before trying an other username.
   text_logout_from_cas: logout from CAS
+  error_cas_no_ticket: No CAS ticket was found during callback.
+  error_cas_invalid_ticket: An invalid CAS ticket was specified, it may have expired. Please try authenticating in again.
+  error_cas_unknown: An unknown error occurred during CAS callback processing.

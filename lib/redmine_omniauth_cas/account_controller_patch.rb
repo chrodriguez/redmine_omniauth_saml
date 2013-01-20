@@ -55,6 +55,18 @@ module Redmine::OmniAuthCAS
         end
       end
 
+      def login_with_cas_failure
+        error = params[:message] || 'unknown'
+        error = 'error_cas_' + error
+        if cas_settings[:replace_redmine_login]
+          render_error({:message => error.to_sym, :status => 500})
+          return false
+        else
+          flash[:error] = l(error.to_sym)
+          redirect_to signin_url
+        end
+      end
+
       # Override AccountController#logout so we handle CAS logout too
       def logout_with_cas
         if session[:logged_in_with_cas]
