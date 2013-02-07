@@ -3,6 +3,15 @@ require File.expand_path('../../test_helper', __FILE__)
 class AccountPatchTest < ActionController::IntegrationTest
   fixtures :users, :roles
 
+  context "GET /auth/:provider" do
+    should "route to a blank action (intercepted by omniauth middleware)" do
+      assert_routing(
+        { :method => :get, :path => "/auth/blah" },
+        { :controller => 'account', :action => 'blank', :provider => 'blah' }
+      )
+    end
+    #TODO: some real test?
+  end
   context "GET /auth/:provider/callback" do
     should "route things correctly" do
       assert_routing(
