@@ -27,6 +27,7 @@ class AccountControllerTest
 
     should "redirect to /login after failed login" do
       request.env["omniauth.auth"] = {"uid"=>"non-existent"}
+      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/"
       get :login_with_cas_callback, :provider => "cas"
       assert_redirected_to '/login'
     end

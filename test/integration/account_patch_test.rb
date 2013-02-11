@@ -7,7 +7,7 @@ class AccountPatchTest < ActionController::IntegrationTest
     should "route to a blank action (intercepted by omniauth middleware)" do
       assert_routing(
         { :method => :get, :path => "/auth/blah" },
-        { :controller => 'account', :action => 'blank', :provider => 'blah' }
+        { :controller => 'account', :action => 'login_with_cas_redirect', :provider => 'blah' }
       )
     end
     #TODO: some real test?
