@@ -18,22 +18,22 @@ class AccountControllerTest
     end
   end
 
-  context "GET login_with_omniauth" do
+  context "GET login_with_cas_callback" do
     should "redirect to /my/page after successful login" do
       request.env["omniauth.auth"] = {"uid"=>"admin"}
-      get :login_with_omniauth, :provider => "cas"
+      get :login_with_cas_callback, :provider => "cas"
       assert_redirected_to '/my/page'
     end
 
     should "redirect to /login after failed login" do
       request.env["omniauth.auth"] = {"uid"=>"non-existent"}
-      get :login_with_omniauth, :provider => "cas"
+      get :login_with_cas_callback, :provider => "cas"
       assert_redirected_to '/login'
     end
 
     should "set a boolean in session to keep track of login" do
       request.env["omniauth.auth"] = {"uid"=>"admin"}
-      get :login_with_omniauth, :provider => "cas"
+      get :login_with_cas_callback, :provider => "cas"
       assert_redirected_to '/my/page'
       assert session[:logged_in_with_cas]
     end

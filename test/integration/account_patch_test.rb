@@ -16,7 +16,7 @@ class AccountPatchTest < ActionController::IntegrationTest
     should "route things correctly" do
       assert_routing(
         { :method => :get, :path => "/auth/blah/callback" },
-        { :controller => 'account', :action => 'login_with_omniauth', :provider => 'blah' }
+        { :controller => 'account', :action => 'login_with_cas_callback', :provider => 'blah' }
       )
     end
 
