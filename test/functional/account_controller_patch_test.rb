@@ -16,6 +16,15 @@ class AccountControllerTest
       get :login
       assert_select '#cas-login'
     end
+
+    should "correct double-escaped URL" do
+      #I don't really know where this bug comes from but it seems URLs are escaped twice
+      #in my setup which causes the back_url to be invalid. Let's try to be smart about
+      #this directly in the plugin 
+      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "blah"
+      get :login, :back_url => "https%3A%2F%2Fblah%2F"
+      assert_select '#cas-login > a[href=?]', '/auth/cas?origin=https%3A%2F%2Fblah%2F'
+    end
   end
 
   context "GET login_with_cas_callback" do

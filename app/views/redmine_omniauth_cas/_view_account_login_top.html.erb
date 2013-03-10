@@ -5,7 +5,13 @@
 <% end %>
 
 <div id="cas-login">
-  <%= link_to label_for_cas_login, :controller => "account", :action => "login_with_cas_redirect", :provider => "cas", :origin => back_url %>
+  <%
+    @back_url = back_url
+    #unescapes back_url on-the-fly because it might be double-escaped in some environments
+    #(it happens for me at work with 2 reverse-proxies in front of the app...)
+    @back_url = CGI.unescape(@back_url) if @back_url && @back_url.match(/^https?%3A/)
+  %>
+  <%= link_to label_for_cas_login, :controller => "account", :action => "login_with_cas_redirect", :provider => "cas", :origin => @back_url %>
 </div>
 
 <% end %>
