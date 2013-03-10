@@ -17,7 +17,7 @@ Redmine::Plugin.register :redmine_omniauth_cas do
   author 'Jean-Baptiste BARTH'
   author_url 'mailto:jeanbaptiste.barth@gmail.com'
   url 'https://github.com/jbbarth/redmine_omniauth_cas'
-  version '0.1.1'
+  version '0.1.2'
   requires_redmine :version_or_higher => '2.0.0'
   settings :default => { 'enabled' => 'true', 'label_login_with_cas' => '', 'cas_server' => '' },
            :partial => 'settings/omniauth_cas_settings'
