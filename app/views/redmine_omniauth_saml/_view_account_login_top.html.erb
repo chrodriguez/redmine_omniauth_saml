@@ -1,0 +1,11 @@
+<% if Redmine::OmniAuthSAML.enabled? %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "login", :plugin => "redmine_omniauth_saml" %>
+<% end %>
+
+<div id="saml-login">
+  <%= link_to label_for_saml_login, :controller => "account", :action => "login_with_saml_redirect", :provider => "saml", :origin => back_url %>
+</div>
+
+<% end %>
