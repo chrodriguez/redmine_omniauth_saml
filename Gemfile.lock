@@ -1,0 +1,30 @@
+GEM
+  specs:
+    canonix (0.1.1)
+    hashie (2.0.5)
+    macaddr (1.6.1)
+      systemu (~> 2.5.0)
+    mini_portile (0.5.1)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
+    omniauth (1.1.4)
+      hashie (>= 1.2, < 3)
+      rack
+    omniauth-saml (1.0.0)
+      omniauth (~> 1.1)
+      ruby-saml (~> 0.6)
+    rack (1.5.2)
+    ruby-saml (0.7.2)
+      canonix (= 0.1.1)
+      nokogiri
+      uuid (~> 2.3)
+    systemu (2.5.2)
+    uuid (2.3.7)
+      macaddr (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  omniauth (>= 1.1.1)
+  omniauth-saml (~> 1.0.0)

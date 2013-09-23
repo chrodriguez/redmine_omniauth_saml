@@ -1,0 +1,8 @@
+es:
+  label_login_with_saml: Acceder usando SAML
+  label_login_page_text: Login page text
+  label_saml_enabled: Habilitar autenticación SAML
+  label_replace_redmine_login: Reemplazar el login de Redmine
+  text_full_logout_proposal: Tal vez quiera %{value} antes de intentar con otro usuario
+  text_logout_from_saml: cerrar su sesión SSO
+  label_onthefly_creation: Crear usuarios automáticamente?

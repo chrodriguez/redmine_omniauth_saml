@@ -11,7 +11,7 @@ module Redmine::OmniAuthSAML
 
     module InstanceMethods
       def label_for_saml_login
-        Redmine::OmniAuthCAS.label_login_with_saml.presence || l(:label_login_with_saml)
+        Redmine::OmniAuthSAML.label_login_with_saml.presence || l(:label_login_with_saml)
       end
     end
   end

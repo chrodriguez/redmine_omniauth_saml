@@ -29,7 +29,7 @@ module Redmine::OmniAuthSAML
       def login_with_saml_callback
         auth = request.env["omniauth.auth"]
         #user = User.find_by_provider_and_uid(auth["provider"], auth["uid"])
-        user = User.find_by_login(auth["uid"]) || User.find_by_mail(auth["uid"])
+        user = User.find_or_create_from_omniauth(auth) 
 
         # taken from original AccountController
         # maybe it should be splitted in core
@@ -37,7 +37,7 @@ module Redmine::OmniAuthSAML
           logger.warn "Failed login for '#{auth[:uid]}' from #{request.remote_ip} at #{Time.now.utc}"
           error = l(:notice_account_invalid_creditentials).sub(/\.$/, '')
           if saml_settings["enabled"]
-            link = self.class.helpers.link_to(l(:text_logout_from_saml), saml_logout_url, :target => "_blank")
+            link = self.class.helpers.link_to(l(:text_logout_from_saml), saml_logout_url(home_url), :target => "_blank")
             error << ". #{l(:text_full_logout_proposal, :value => link)}"
           end
           if saml_settings["replace_redmine_login"]
@@ -83,12 +83,9 @@ module Redmine::OmniAuthSAML
       end
 
       def saml_logout_url(service = nil)
-        return ''
-        logout_uri = saml_settings['saml_logout_url']
-        if !service.blank?
-          logout_uri += service
-        end
-        logout_uri
+        logout_uri = RedmineSAML['logout_admin']
+        logout_uri += service.to_s unless logout_uri.blank?
+        logout_uri || home_url
       end
 
     end
