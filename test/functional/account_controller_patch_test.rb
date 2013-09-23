@@ -7,64 +7,58 @@ require Rails.root.join('test/functional/account_controller_test')
 class AccountControllerTest
   fixtures :users, :roles
 
-  context "GET /login CAS button" do
-    should "show up only if there's a plugin setting for CAS URL" do
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = ""
+  context "GET /login SAML button" do
+    should "show up only if there's a plugin setting for SAML URL" do
+      Setting["plugin_redmine_omniauth_saml"]["enabled"] = false
       get :login
-      assert_select '#cas-login', 0
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "blah"
+      assert_select '#saml-login', 0
+      Setting["plugin_redmine_omniauth_saml"]["enabled"] = true
       get :login
-      assert_select '#cas-login'
-    end
-
-    should "correct double-escaped URL" do
-      #I don't really know where this bug comes from but it seems URLs are escaped twice
-      #in my setup which causes the back_url to be invalid. Let's try to be smart about
-      #this directly in the plugin 
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "blah"
-      get :login, :back_url => "https%3A%2F%2Fblah%2F"
-      assert_select '#cas-login > a[href=?]', '/auth/cas?origin=https%3A%2F%2Fblah%2F'
+      assert_select '#saml-login'
     end
   end
 
-  context "GET login_with_cas_callback" do
+  context "GET login_with_saml_callback" do
+    setup do
+      RedmineSAML[:attribute_mapping] = {
+        'login'      => 'login',
+        'firstname'  => 'first_name',
+        'lastname'   => 'last_name',
+        'mail'       => 'mail'
+      }
+      Setting["plugin_redmine_omniauth_saml"]["enabled"] = true
+    end
+
     should "redirect to /my/page after successful login" do
-      request.env["omniauth.auth"] = {"uid"=>"admin"}
-      get :login_with_cas_callback, :provider => "cas"
+      request.env["omniauth.auth"] = {"login"=>"admin"}
+      get :login_with_saml_callback, :provider => "saml"
       assert_redirected_to '/my/page'
     end
 
     should "redirect to /login after failed login" do
-      request.env["omniauth.auth"] = {"uid"=>"non-existent"}
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/"
-      get :login_with_cas_callback, :provider => "cas"
+      request.env["omniauth.auth"] = {"login"=>"non-existent"}
+      get :login_with_saml_callback, :provider => "saml"
       assert_redirected_to '/login'
     end
 
     should "set a boolean in session to keep track of login" do
-      request.env["omniauth.auth"] = {"uid"=>"admin"}
-      get :login_with_cas_callback, :provider => "cas"
+      request.env["omniauth.auth"] = {"login"=>"admin"}
+      get :login_with_saml_callback, :provider => "saml"
       assert_redirected_to '/my/page'
-      assert session[:logged_in_with_cas]
+      assert session[:logged_in_with_saml]
     end
 
-    should "redirect to Home if not logged in with CAS" do
+    should "redirect to Home if not logged in with SAML" do
       get :logout
       assert_redirected_to home_url
     end
 
-    should "redirect to CAS logout if previously logged in with CAS" do
-      session[:logged_in_with_cas] = true
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/"
+    should "redirect to SAML logout if previously logged in with SAML" do
+      RedmineSAML[:logout_admin] = "http://saml.server/logout?return="
+      session[:logged_in_with_saml] = true
       get :logout
-      assert_redirected_to 'http://cas.server/logout?gateway=1&service=http://test.host/'
+      assert_redirected_to "#{RedmineSAML[:logout_admin]}http://test.host/"
     end
 
-    should "respect path in CAS server when generating logout url" do
-      session[:logged_in_with_cas] = true
-      Setting["plugin_redmine_omniauth_cas"]["cas_server"] = "http://cas.server/cas"
-      get :logout
-      assert_redirected_to 'http://cas.server/cas/logout?gateway=1&service=http://test.host/'
-    end
   end
 end
