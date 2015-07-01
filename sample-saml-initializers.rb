@@ -1,21 +1,23 @@
-# Edit the options depending on your SAML needs
-RedmineSAML = HashWithIndifferentAccess.new(
-    :assertion_consumer_service_url => "http://localhost:3000", # The redmine application hostname
-    :issuer                         => "saml-redmine",   # The issuer name
-    :idp_sso_target_url             => "https://sso.server/SSOService", # SSO login endpoint
-    :idp_cert_fingerprint           => "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX", # SSL fingerprint
-    :name_identifier_format         => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
-    :logout_admin                   => "https://sso.server/SingleLogoutService.php?ReturnTo=", # SSO logout URL
-    :attribute_mapping              => { 
+Redmine::OmniAuthSAML::Base.configure do |config|
+  config.saml = {
+    :assertion_consumer_service_url => "http://redmine.example.com", # The redmine application hostname
+    :issuer                         => "sso_issuer",                 # The issuer name
+    :idp_sso_target_url             => "http://sso.desarrollo.unlp.edu.ar/saml2/idp/SSOService.php", # SSO login endpoint
+    :idp_cert_fingerprint           => "certificate fingerprint", # SSO ssl certificate fingerprint
+    :name_identifier_format         => "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    :signout_url                    => "http://sso.example.com/saml2/idp/SingleLogoutService.php?ReturnTo=",
+    :idp_slo_target_url             => "http://sso.example.com/saml2/idp/SingleLogoutService.php",
+    :name_identifier_value          => "mail", # Which redmine field is used as name_identifier_value for SAML logout
+    :attribute_mapping              => {
     # How will we map attributes from SSO to redmine attributes
       :login      => 'extra.raw_info.username',
       :firstname  => 'extra.raw_info.first_name',
       :lastname   => 'extra.raw_info.last_name',
-      :mail       => 'extra.raw_info.personal_email'
+      :mail       => 'extra.raw_info.email'
     }
-)
+  }
 
-# The following code must be present. Don't remove it
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :saml, RedmineSAML
+  config.on_login do |omniauth_hash, user|
+    # Implement any hook you want here
+  end
 end

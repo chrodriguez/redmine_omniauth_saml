@@ -6,7 +6,7 @@ h2. Install
 
 You can first take a look at general instructions for plugins "here":http://www.redmine.org/wiki/redmine/Plugins.
 
-Note that the plugin is now *only compatible with Redmine 2.0.0 or higher*. 
+Note that the plugin is now *only compatible with Redmine 3.0 or higher*. For Redmine 2.0 see 2.0 branch
 
 Then :
 * clone this repository in your plugins/ directory ; if you have a doubt you put it at the good level, you can go to your redmine root directoryand check you have a @plugins/redmine_omniauth_saml/init.rb@ file
