@@ -91,7 +91,7 @@ module Redmine::OmniAuthSAML
 
     # Method to handle IdP initiated logouts
     def idp_logout_request
-      settings = omniauth_saml_settings
+      settings = OneLogin::RubySaml::Settings.new omniauth_saml_settings
       logout_request = OneLogin::RubySaml::SloLogoutrequest.new(params[:SAMLRequest])
       unless logout_request.is_valid?
         logger.error 'IdP initiated LogoutRequest was not valid!'
@@ -101,6 +101,7 @@ module Redmine::OmniAuthSAML
       logger.info "IdP initiated Logout for #{logout_request.name_id}"
 
       # Actually log out this session
+      saml_logout_user
 
       # Generate a response to the IdP.
       logout_request_id = logout_request.id
@@ -125,7 +126,7 @@ module Redmine::OmniAuthSAML
         # Actually log out this session
         if logout_response.success?
           logger.info "Delete session for '#{User.current.login}'"
-          logout_user
+          saml_logout_user
         end
       end
 
@@ -139,7 +140,7 @@ module Redmine::OmniAuthSAML
 
       if not settings[:signout_url]
         logger.info "SLO IdP Endpoint not found in settings, executing then a normal logout'"
-        logout_user
+        saml_logout_user
         redirect home_path
       else
 
@@ -160,6 +161,11 @@ module Redmine::OmniAuthSAML
 
 
       private
+      def saml_logout_user
+        logout_user
+        reset_session
+      end
+
       def name_identifier_value
         User.current.send Redmine::OmniAuthSAML.configured_saml[:name_identifier_value].to_sym
       end
@@ -173,7 +179,7 @@ module Redmine::OmniAuthSAML
       end
 
       def saml_logout_url(service = nil)
-        logout_uri = Redmine::OmniAuthSAML.Base.configured_saml[:signout_url]
+        logout_uri = Redmine::OmniAuthSAML.configured_saml[:signout_url]
         logout_uri += service.to_s unless logout_uri.blank?
         logout_uri || home_url
       end
