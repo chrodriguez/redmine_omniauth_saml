@@ -70,20 +70,110 @@ module Redmine::OmniAuthSAML
 
       def logout_with_saml
         if saml_settings["enabled"] && session[:logged_in_with_saml]
-          logout_user
-          redirect_to saml_logout_url(home_url)
+          do_logout_with_saml
         else
           logout_without_saml
         end
       end
 
+      def do_logout_with_saml
+        # If we're given a logout request, handle it in the IdP logout initiated method
+        if params[:SAMLRequest]
+          idp_logout_request
+        # We've been given a response back from the IdP, process it
+        elsif params[:SAMLResponse]
+          process_logout_response
+        # Initiate SLO (send Logout Request)
+        else
+          sp_logout_request
+        end
+      end
+
+    # Method to handle IdP initiated logouts
+    def idp_logout_request
+      settings = omniauth_saml_settings
+      logout_request = OneLogin::RubySaml::SloLogoutrequest.new(params[:SAMLRequest])
+      unless logout_request.is_valid?
+        logger.error 'IdP initiated LogoutRequest was not valid!'
+        render :inline => logger.error
+        return
+      end
+      logger.info "IdP initiated Logout for #{logout_request.name_id}"
+
+      # Actually log out this session
+
+      # Generate a response to the IdP.
+      logout_request_id = logout_request.id
+      logout_response = OneLogin::RubySaml::SloLogoutresponse.new.create(settings, logout_request_id, nil, :RelayState => params[:RelayState])
+
+      redirect_to logout_response
+    end
+
+    # After sending an SP initiated LogoutRequest to the IdP, we need to accept
+    # the LogoutResponse, verify it, then actually delete our session.
+    def process_logout_response
+      settings = OneLogin::RubySaml::Settings.new omniauth_saml_settings
+
+      logout_response = OneLogin::RubySaml::Logoutresponse.new(params[:SAMLResponse], settings, session.has_key?(:transaction_id) ? { matches_request_id: session[:transaction_id] } : {})
+
+      logger.info "LogoutResponse is: #{logout_response.to_s}"
+
+      # Validate the SAML Logout Response
+      if not logout_response.validate
+        logger.error "The SAML Logout Response is invalid"
+      else
+        # Actually log out this session
+        if logout_response.success?
+          logger.info "Delete session for '#{User.current.login}'"
+          logout_user
+        end
+      end
+
+      redirect_to home_path
+    end
+
+    # Create a SP initiated SLO
+    def sp_logout_request
+      # LogoutRequest accepts plain browser requests w/o parameters
+      settings = omniauth_saml_settings
+
+      if not settings[:signout_url]
+        logger.info "SLO IdP Endpoint not found in settings, executing then a normal logout'"
+        logout_user
+        redirect home_path
+      else
+
+        # Since we created a new SAML request, save the transaction_id
+        # to compare it with the response we get back
+        logout_request = OneLogin::RubySaml::Logoutrequest.new
+        session[:transaction_id] = logout_request.uuid
+        logger.info "New SP SLO for userid '#{User.current.login}' transactionid '#{session[:transaction_id]}'"
+
+        settings[:name_identifier_value] ||= name_identifier_value
+
+        relay_state = home_url # url_for controller: 'saml', action: 'index'
+        redirect_to(logout_request.create(OneLogin::RubySaml::Settings.new(settings), :RelayState => relay_state))
+      end
+    end
+
+
+
+
       private
+      def name_identifier_value
+        User.current.send Redmine::OmniAuthSAML.configured_saml[:name_identifier_value].to_sym
+      end
+
       def saml_settings
         Redmine::OmniAuthSAML.settings_hash
       end
 
+      def omniauth_saml_settings
+        Redmine::OmniAuthSAML.configured_saml
+      end
+
       def saml_logout_url(service = nil)
-        logout_uri = RedmineSAML['logout_admin']
+        logout_uri = Redmine::OmniAuthSAML.Base.configured_saml[:signout_url]
         logout_uri += service.to_s unless logout_uri.blank?
         logout_uri || home_url
       end
