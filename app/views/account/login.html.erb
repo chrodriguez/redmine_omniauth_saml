@@ -1,0 +1,59 @@
+<%= call_hook :view_account_login_top %>
+<div id="login-form">
+<%= form_tag(signin_path) do %>
+<%= back_url_hidden_field_tag %>
+<table style="width: 1%;">
+<% if Redmine::OmniAuthSAML.enabled? %>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <h3>ACCESO ALTERNATIVO</h3>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p>También puede acceder directamente utilizando su usuario y contraseña, aunque de esta forma no podrá acceder directamente a otras herramientas.</p>
+            </td>
+        </tr>
+<% end %>
+<tr>
+    <td style="text-align:right;"><label for="username"><%=l(:field_login)%>:</label></td>
+    <td style="text-align:left;"><%= text_field_tag 'username', params[:username], :tabindex => '1' %></td>
+</tr>
+<tr>
+    <td style="text-align:right;"><label for="password"><%=l(:field_password)%>:</label></td>
+    <td style="text-align:left;"><%= password_field_tag 'password', nil, :tabindex => '2' %></td>
+</tr>
+<% if Setting.openid? %>
+<tr>
+  <td style="text-align:right;"><label for="openid_url"><%=l(:field_identity_url)%></label></td>
+  <td style="text-align:left;"><%= text_field_tag "openid_url", nil, :tabindex => '3' %></td>
+</tr>
+<% end %>
+<tr>
+    <td></td>
+    <td style="text-align:left;">
+        <% if Setting.autologin? %>
+        <label for="autologin"><%= check_box_tag 'autologin', 1, false, :tabindex => 4 %> <%= l(:label_stay_logged_in) %></label>
+        <% end %>
+    </td>
+</tr>
+<tr>
+    <td style="text-align:left;">
+        <% if Setting.lost_password? %>
+            <%= link_to l(:label_password_lost), lost_password_path %>
+        <% end %>
+    </td>
+    <td style="text-align:right;">
+        <input type="submit" name="login" value="<%=l(:button_login)%> &#187;" tabindex="5"/>
+    </td>
+</tr>
+</table>
+<% end %>
+</div>
+<%= call_hook :view_account_login_bottom %>
+
+<% if params[:username].present? %>
+<%= javascript_tag "$('#password').focus();" %>
+<% else %>
+<%= javascript_tag "$('#username').focus();" %>
+<% end %>

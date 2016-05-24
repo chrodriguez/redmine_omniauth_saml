@@ -1,11 +1,20 @@
 <% if Redmine::OmniAuthSAML.enabled? %>
 
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag "login", :plugin => "redmine_omniauth_saml" %>
-<% end %>
+  <% content_for :header_tags do %>
+    <%= stylesheet_link_tag "login", :plugin => "redmine_omniauth_saml" %>
+  <% end %>
 
-<div id="saml-login">
-  <%= link_to label_for_saml_login, :controller => "account", :action => "login_with_saml_redirect", :provider => "saml", :origin => back_url %>
-</div>
+  <div>
+    <div class="saml-login">
+      <%= image_tag("websso-logo.png", :plugin => "redmine_omniauth_saml", :title => "WebSSO") %>
+    </div>
+    <div id="saml-login-text">
+      <p>Acceda al <b>Gestor integral de proyectos</b> mediante el sistema de login único.
+      <br/>Este sistema le permite el acceso al <b>Gestor integral de proyectos</b> y otras herramientas.</p>
+    </div>
+  </div>
+  <div class="saml-login">
+    <%= link_to label_for_saml_login, {:controller => "account", :action => "login_with_saml_redirect", :provider => "saml", :origin => back_url}, { :title => l(:title_login_with_saml) } %>
+  </div>
 
 <% end %>

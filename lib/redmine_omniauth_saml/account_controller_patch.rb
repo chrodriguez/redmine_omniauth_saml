@@ -27,7 +27,7 @@ module Redmine::OmniAuthSAML
       end
 
       def login_with_saml_callback
-        auth = request.env["omniauth.auth"]
+	auth = request.env["omniauth.auth"]
         #user = User.find_by_provider_and_uid(auth["provider"], auth["uid"])
         user = User.find_or_create_from_omniauth(auth) 
 
@@ -69,11 +69,10 @@ module Redmine::OmniAuthSAML
       end
 
       def logout_with_saml
+        logout_without_saml
         if saml_settings["enabled"] && session[:logged_in_with_saml]
           do_logout_with_saml
-        else
-          logout_without_saml
-        end
+ 	      end
       end
 
       def do_logout_with_saml
