@@ -96,11 +96,11 @@ module Redmine::OmniAuthSAML
           :idp_slo_target_url,
           :name_identifier_value,
           :attribute_mapping ].each do |k|
-            raise "Redmine::OmiauthSAML.configure requires that saml.#{k} to be setted" unless saml[k]
+            raise "Redmine::OmiauthSAML.configure requires saml.#{k} to be set" unless saml[k]
           end
 
         required_attribute_mapping.each do |k|
-          raise "Redmine::OmiauthSAML.configure requires that saml.attribute_mapping[#{k}] to be setted" unless saml[:attribute_mapping][k]
+          raise "Redmine::OmiauthSAML.configure requires saml.attribute_mapping[#{k}] to be set" unless saml[:attribute_mapping][k]
         end
 
         raise 'Redmine::OmiauthSAML on_login must be a Proc only' if on_login_callback && !on_login_callback.is_a?(Proc)
