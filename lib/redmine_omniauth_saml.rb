@@ -90,7 +90,6 @@ module Redmine::OmniAuthSAML
         [ :assertion_consumer_service_url,
           :issuer,
           :idp_sso_target_url,
-          :idp_cert_fingerprint,
           :name_identifier_format,
           :signout_url,
           :idp_slo_target_url,
@@ -98,6 +97,8 @@ module Redmine::OmniAuthSAML
           :attribute_mapping ].each do |k|
             raise "Redmine::OmiauthSAML.configure requires that saml.#{k} to be setted" unless saml[k]
           end
+
+        raise "Redmine::OmiauthSAML.configure requires either saml.idp_cert_fingerprint or saml.idp_cert to be set" unless saml[:idp_cert_fingerprint] || saml[:idp_cert]
 
         required_attribute_mapping.each do |k|
           raise "Redmine::OmiauthSAML.configure requires that saml.attribute_mapping[#{k}] to be setted" unless saml[:attribute_mapping][k]
