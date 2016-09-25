@@ -5,7 +5,7 @@ Redmine::OmniAuthSAML::Base.configure do |config|
     :idp_sso_target_url             => "http://sso.desarrollo.unlp.edu.ar/saml2/idp/SSOService.php", # SSO login endpoint
     :idp_cert_fingerprint           => "certificate fingerprint", # SSO ssl certificate fingerprint
     :name_identifier_format         => "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
-    :signout_url                    => "http://sso.example.com/saml2/idp/SingleLogoutService.php?ReturnTo=",
+    :signout_url                    => "http://sso.example.com/saml2/idp/SingleLogoutService.php?ReturnTo=", # Optional signout URL, not supported by all identity providers
     :idp_slo_target_url             => "http://sso.example.com/saml2/idp/SingleLogoutService.php",
     :name_identifier_value          => "mail", # Which redmine field is used as name_identifier_value for SAML logout
     :attribute_mapping              => {
