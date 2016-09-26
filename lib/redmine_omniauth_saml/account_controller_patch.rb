@@ -141,7 +141,7 @@ module Redmine::OmniAuthSAML
       if not settings[:signout_url]
         logger.info "SLO IdP Endpoint not found in settings, executing then a normal logout'"
         saml_logout_user
-        redirect home_path
+        redirect_to home_path
       else
 
         # Since we created a new SAML request, save the transaction_id
