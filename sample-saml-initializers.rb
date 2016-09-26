@@ -13,8 +13,6 @@ Redmine::OmniAuthSAML::Base.configure do |config|
     :attribute_mapping              => {
     # How will we map attributes from SSO to redmine attributes
       :login      => 'extra.raw_info.username',
-      :firstname  => 'extra.raw_info.first_name',
-      :lastname   => 'extra.raw_info.last_name',
       :mail       => 'extra.raw_info.email'
     }
   }
