@@ -80,7 +80,10 @@ module Redmine::OmniAuthSAML
       end
 
       def required_attribute_mapping
-        [ :mail ]
+        [ :login,
+          :firstname,
+          :lastname,
+          :mail ]
       end
 
       def validate_configuration!
