@@ -149,7 +149,9 @@ module Redmine::OmniAuthSAML
         logout_request = OneLogin::RubySaml::Logoutrequest.new
         session[:transaction_id] = logout_request.uuid
         logger.info "New SP SLO for userid '#{User.current.login}' transactionid '#{session[:transaction_id]}'"
-
+        
+        # perform the actual logout
+        saml_logout_user
         settings[:name_identifier_value] ||= name_identifier_value
 
         relay_state = home_url # url_for controller: 'saml', action: 'index'
