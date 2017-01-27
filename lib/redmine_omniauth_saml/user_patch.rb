@@ -4,7 +4,6 @@ class User
 
 
   def self.find_or_create_from_omniauth(omniauth)
-    Rails.logger.info "Successful load of MNS view issue hook" + omniauth.uid
     user_attributes = Redmine::OmniAuthSAML.user_attributes_from_saml omniauth
     user = self.find_by_login(user_attributes[:login])
     unless user
@@ -16,8 +15,7 @@ class User
 	user.firstname = user_attributes[:firstname]
 	user.lastname = user_attributes[:lastname]
         user.created_by_omniauth_saml = true
-        user.login    = omniauth.uid
-#        user.language = Setting.default_language
+        user.login    = omniauth.uid #this is onelogin specific probably
         user.activate
         user.save!
         user.reload
