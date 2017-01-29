@@ -1,3 +1,5 @@
+_this fork is onelogin modifications of:_
+
 h1. Redmine OmniAuth SAML plugin
 
 This plugins adds SAML authentication support for "Redmine":http://www.redmine.org thanks to the "OmniAuth authentication framework":https://github.com/intridea/omniauth and specially thanks to "Redmine Omniauth CAS Plugin":https:https://github.com/jbbarth/redmine_omniauth_cas. 
