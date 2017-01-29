@@ -5,6 +5,7 @@ class User
 
   def self.find_or_create_from_omniauth(omniauth)
     user_attributes = Redmine::OmniAuthSAML.user_attributes_from_saml omniauth
+    Rails.logger.info "bobo" + user_attributes.inspect
     user = self.find_by_login(user_attributes[:login])
     unless user
       user = EmailAddress.find_by(address: user_attributes[:mail]).try(:user)
