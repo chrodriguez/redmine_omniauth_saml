@@ -18,3 +18,7 @@ Finally you *must* configure your SAML settings adding a file in @config/initial
 
 Finaly you need to configure some minor options for the plugin to work, in "Administration" > "Plugins" > "Configure" on the OmniAuth SAML plugin line.
 
+
+h2. Donations
+
+<a href='https://pledgie.com/campaigns/33451'><img alt='Click here to lend your support to: Redmine Omniauth SAML Plugin and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/33451.png?skin_name=chrome' border='0' ></a>
