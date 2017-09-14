@@ -6,3 +6,4 @@ en:
   text_full_logout_proposal: You may want to %{value} before trying an other username.
   text_logout_from_saml: close SSO session
   label_onthefly_creation: Create users automatically?
+  error_saml_invalid_ticket: Invalid SAML authentication ticket
