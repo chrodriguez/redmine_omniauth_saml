@@ -1,7 +1,8 @@
 Redmine::OmniAuthSAML::Base.configure do |config|
   config.saml = {
     :assertion_consumer_service_url => "http://redmine.example.com/auth/saml/callback", # OmniAuth callback URL
-    :issuer                         => "http://redmine.example.com",                    # The issuer name / entity ID. Must be an URI as per SAML 2.0 spec.
+    :issuer                         => "http://redmine.example.com/saml/metadata",      # The issuer name / entity ID. Must be an URI as per SAML 2.0 spec.
+    :single_logout_service_url      => "http://redmine.example.com/auth/saml/sls",      # The SLS (logout) callback URL
     :idp_sso_target_url             => "http://sso.desarrollo.unlp.edu.ar/saml2/idp/SSOService.php", # SSO login endpoint
     :idp_cert_fingerprint           => "certificate fingerprint", # SSO ssl certificate fingerprint
     # Alternatively, specify the full certifiate:
