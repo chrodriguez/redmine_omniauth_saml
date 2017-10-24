@@ -157,8 +157,11 @@ module Redmine::OmniAuthSAML
       end
     end
 
-
-
+    # Manage SLS response
+    def redirect_after_saml_logout
+      saml_logout_user
+      redirect_to signin_url
+    end
 
       private
       def saml_logout_user
