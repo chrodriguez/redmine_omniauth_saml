@@ -15,7 +15,7 @@ module Redmine::OmniAuthSAML
 
       def login_with_saml
         #TODO: test 'replace_redmine_login' feature
-        if saml_settings["enabled"] && saml_settings["replace_redmine_login"]
+	if saml_settings["enabled"] && saml_settings["replace_redmine_login"]
           redirect_to :controller => "account", :action => "login_with_saml_redirect", :provider => "saml", :origin => back_url
         else
           login_without_saml
@@ -30,8 +30,8 @@ module Redmine::OmniAuthSAML
 	auth = request.env["omniauth.auth"]
         #user = User.find_by_provider_and_uid(auth["provider"], auth["uid"])
         user = User.find_or_create_from_omniauth(auth) 
-
-        # taken from original AccountController
+        
+  	# taken from original AccountController
         # maybe it should be splitted in core
         if user.blank?
           logger.warn "Failed login for '#{auth[:uid]}' from #{request.remote_ip} at #{Time.now.utc}"
@@ -57,7 +57,8 @@ module Redmine::OmniAuthSAML
       end
 
       def login_with_saml_failure
-        error = params[:message] || 'unknown'
+   debugger
+	error = params[:message] || 'unknown'
         error = 'error_saml_' + error
         if saml_settings["replace_redmine_login"]
           render_error({:message => error.to_sym, :status => 500})

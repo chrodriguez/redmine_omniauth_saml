@@ -1,8 +1,8 @@
 <%= call_hook :view_account_login_top %>
-<div id="login-form">
+<div id="login-form" style="width: 40%">
 <%= form_tag(signin_path) do %>
 <%= back_url_hidden_field_tag %>
-<table style="width: 1%;">
+<table>
 <% if Redmine::OmniAuthSAML.enabled? %>
         <tr>
             <td colspan="2" style="text-align:center;">
