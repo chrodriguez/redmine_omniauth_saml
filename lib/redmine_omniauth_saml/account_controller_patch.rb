@@ -6,19 +6,18 @@ module Redmine::OmniAuthSAML
       base.send(:include, InstanceMethods)
       base.class_eval do
         unloadable
-        alias_method_chain :login, :saml
-        alias_method_chain :logout, :saml
+        AccountController.prepend(AccountControllerPatch)
       end
     end
 
     module InstanceMethods
 
-      def login_with_saml
+      def login
         #TODO: test 'replace_redmine_login' feature
         if saml_settings["enabled"] && saml_settings["replace_redmine_login"]
           redirect_to :controller => "account", :action => "login_with_saml_redirect", :provider => "saml", :origin => back_url
         else
-          login_without_saml
+          super
         end
       end
 
@@ -68,11 +67,11 @@ module Redmine::OmniAuthSAML
         end
       end
 
-      def logout_with_saml
+      def logout
         if saml_settings["enabled"] && session[:logged_in_with_saml]
           do_logout_with_saml
         else
-          logout_without_saml
+          super
         end
       end
 
@@ -193,5 +192,5 @@ end
 
 unless AccountController.included_modules.include? Redmine::OmniAuthSAML::AccountControllerPatch
   AccountController.send(:include, Redmine::OmniAuthSAML::AccountControllerPatch)
-  AccountController.skip_before_filter :verify_authenticity_token, :only => [:login_with_saml_callback]
+  AccountController.before_action :verify_authenticity_token, :except => [:login_with_saml_callback]
 end

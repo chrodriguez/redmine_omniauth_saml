@@ -5,7 +5,7 @@ require 'redmine_omniauth_saml/user_patch'
 
 
 # Patches to existing classes/modules
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   require_dependency 'redmine_omniauth_saml/account_helper_patch'
   require_dependency 'redmine_omniauth_saml/account_controller_patch'
 end
