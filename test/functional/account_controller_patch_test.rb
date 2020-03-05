@@ -24,7 +24,8 @@ class AccountControllerTest
         'login'      => 'login',
         'firstname'  => 'first_name',
         'lastname'   => 'last_name',
-        'mail'       => 'mail'
+        'mail'       => 'mail',
+        'admin'       => 'admin'
       }
       Setting["plugin_redmine_omniauth_saml"]["enabled"] = true
     end

@@ -7,7 +7,8 @@ class UserPatchTest < ActiveSupport::TestCase
         'login'      => 'login',
         'firstname'  => 'first_name',
         'lastname'   => 'last_name',
-        'mail'       => 'mail'
+        'mail'       => 'mail',
+        'admin'       => 'admin',
       }
 
   end
@@ -17,7 +18,8 @@ class UserPatchTest < ActiveSupport::TestCase
       u = User.new(
         :firstname => 'name',
         :lastname => 'last',
-        :mail => 'mail@example.net')
+        :mail => 'mail@example.net',
+        :admin => false)
       u.login = 'login'
       assert u.save
       assert_not_nil User.find_or_create_from_omniauth(:login => 'login')
@@ -39,7 +41,7 @@ class UserPatchTest < ActiveSupport::TestCase
       end
 
       should "return created user" do
-        new = User.find_or_create_from_omniauth(:login => 'new', :first_name => 'first name', :last_name => 'last name', :mail => 'new@example.com')
+        new = User.find_or_create_from_omniauth(:login => 'new', :first_name => 'first name', :last_name => 'last name', :mail => 'new@example.com', :admin => false)
         assert_not_nil new
         assert_in_delta Time.now, new.created_on, 1
       end
@@ -51,13 +53,14 @@ class UserPatchTest < ActiveSupport::TestCase
       end
 
       should "map single level attribute" do
-        attributes = { :login => 'new', :first_name => 'first name', :last_name => 'last name', :mail => 'new@example.com' }
+        attributes = { :login => 'new', :first_name => 'first name', :last_name => 'last name', :mail => 'new@example.com', :admin => false }
         new = User.find_or_create_from_omniauth attributes
         assert_not_nil new
         assert_equal attributes[:login], new.login
         assert_equal attributes[:first_name], new.firstname
         assert_equal attributes[:last_name], new.lastname
         assert_equal attributes[:mail], new.mail
+        assert_equal attributes[:admin], new.admin
       end
 
       should "map nested levels attributes" do
@@ -65,14 +68,16 @@ class UserPatchTest < ActiveSupport::TestCase
             :login      => 'one.two.three.four.levels.username',
             :firstname  => 'one.two.three.four.levels.first_name',
             :lastname   => 'one.two.three.four.levels.last_name',
-            :mail       => 'one.two.three.four.levels.personal_email'
+            :mail       => 'one.two.three.four.levels.personal_email',
+            :admin       => 'one.two.three.four.levels.is_admin'
           }
 
         real_att = { 
           'username'       => 'new',
           'first_name'  => 'first name',
           'last_name' => 'last name',
-          'personal_email'     => 'mail@example.com'
+          'personal_email'     => 'mail@example.com',
+          'is_admin' => false
         }
 
         attributes = { 'one' => { 'two' => { 'three' => { 'four' => { 'levels' =>  real_att }}}}}
@@ -85,6 +90,7 @@ class UserPatchTest < ActiveSupport::TestCase
         assert_equal real_att['first_name'], new.firstname
         assert_equal real_att['last_name'], new.lastname
         assert_equal real_att['personal_email'], new.mail
+        assert_equal real_att['is_admin'], new.admin
 
       end
     end

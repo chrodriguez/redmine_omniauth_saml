@@ -16,7 +16,8 @@ Redmine::OmniAuthSAML::Base.configure do |config|
       :login      => 'extra.raw_info.username',
       :mail       => 'extra.raw_info.email',
       :firstname  => 'extra.raw_info.firstname',
-      :lastname   => 'extra.raw_info.firstname'
+      :lastname   => 'extra.raw_info.firstname',
+      :admin   => 'extra.raw_info.admin'
     }
   }
 

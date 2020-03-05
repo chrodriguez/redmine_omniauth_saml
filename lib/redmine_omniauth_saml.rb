@@ -83,7 +83,9 @@ module Redmine::OmniAuthSAML
         [ :login,
           :firstname,
           :lastname,
-          :mail ]
+          :mail,
+          :admin
+        ]
       end
 
       def validate_configuration!
