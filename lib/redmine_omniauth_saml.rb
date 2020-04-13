@@ -64,7 +64,7 @@ module Redmine::OmniAuthSAML
         HashWithIndifferentAccess.new.tap do |h|
           required_attribute_mapping.each do |symbol|
             key = configured_saml[:attribute_mapping][symbol]
-            h[symbol] = key.split('.')                # Get an array with nested keys: name.first will return [name, first]
+            h[symbol] = key.split('|')                # Get an array with nested keys: name|first will return [name, first]
               .map {|x| [:[], x]}                     # Create pair elements being :[] symbol and the key
               .inject(omniauth) do |hash, params|     # For each key, apply method :[] with key as parameter
                 hash.send(*params)
