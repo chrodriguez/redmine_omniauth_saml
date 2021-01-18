@@ -92,8 +92,6 @@ module Redmine::OmniAuthSAML
           :idp_sso_target_url,
           :idp_cert_fingerprint,
           :name_identifier_format,
-          :signout_url,
-          :idp_slo_target_url,
           :name_identifier_value,
           :attribute_mapping ].each do |k|
             raise "Redmine::OmiauthSAML.configure requires that saml.#{k} to be setted" unless saml[k]
